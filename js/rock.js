@@ -1,99 +1,66 @@
 // game start 
 let player ;
 let computer ;
-const game = true;
 const OPTIONS = ["rock", "paper", "scissors"]
-let score = 0;
+let winner = document.querySelector("h2");
+let play1 = document.querySelector("#player");
+let comp = document.querySelector("#computer");
 // selection at random for the computer
 function random_option(options){
     let option = Math.round((Math.random()*2));
     return options[option];
 }
-// selection for the user
-function display_an_option(options, display_element){
-    display_element.innerText = "";
-    for(let i=0; i<options.length; i++){
-        let option = options[i];
-        display_element.innerText += ` ${i+1} -> ${option} `
-    }
+// selection for the user with buttons new branch
+function playerSelection(){
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach( (but) => but.addEventListener("click", game_logic));
 }
-function pick_an_option(){
-   
-    let repeat_until_result = true;
+// the logic of the game is execute every time the user push a button
+function game_logic(event) {
+    // intilaize game
+    winner.textContent = "";
+    play1.textContent = "";
+    comp.textContent = "";
+    // player push button
+    player = event.target.outerText.toLowerCase();
+    // computer option
+    computer = random_option(OPTIONS);
+    //  winner
+    win = the_winer_is(computer, player);
+    // show the results
+    play1.textContent = `Player selection: ${player}`;
+    comp.textContent = `Computer selection: ${computer}`;
+    if ( win == "computer"){
+        winner.textContent = "Sorry you lose";
+    }else if ( win == "player"){
+        winner.textContent = "Congratulations you have win";
+    }else{
+        winner.textContent = "Start again";
+    }
+    
+}
 
-    while (repeat_until_result){
-        let option = prompt("what option do you want (1,2,3)");
-        if (+option){
-            option = +option;
-        }else{
-            alert("please write a number between 1, 2, 3");
-            continue;
-        }
-        if (+option<=0 || +option>3){
-            alert("sorry this option is not valid");
-            continue;
-        }else{
-            return option;
-        }
-    }
-   
-}
 // function to determine the winner
 function the_winer_is(computer, player){
     let wings;
     if ( computer === "paper" && player === "rock"){
         wings = "computer"
-    }else{
+    }else if ( computer == "rock" && player === "paper"){
         wings = "player"
-    }
-    if ( computer === "rock" && player === "scissors"){
+    }else if ( computer === "rock" && player === "scissors"){
         wings = "computer"
-    }else{
+    }else if ( computer === "scissors" && player === "rock"){
         wings = player
     }
     if ( computer === "scissors" && player === "paper"){
         wings = "computer"
-    }else{
+    }else if ( computer === "paper" && player == "scissors"){
         wings = "player"
+    }else{
+        wings = null;
     }
     return wings;
 }
 
-// loop of the game
-
-while(game){ 
-    // scores
-   
-    let attempts = document.getElementById("attempts");
-    let display_options = document.getElementById("options");
-    let winner = document.querySelector("h2");
-    // number ot attempts
-    score += 1;
-    attempts.innerText = score;
-    
-    // computer selection
-    computer = random_option(OPTIONS);
-    // player selection
-    display_an_option(OPTIONS, display_options);
-    player = pick_an_option();
-    player = OPTIONS[player];
-    // compare computer and player selection
-    if ( computer === player){
-        // if they are equal star again
-        console.log(`repeat both of you have the same option computer -> ${computer} and player -> ${player}`);
-        score += 1;
-        continue;
-    }else{
-        // else  determine how wins
-        winner.innerText += "and the winer is " + the_winer_is(computer, player);
-        console.log("congratulations :)")
-        break;
-    }
-}
-
-        
-
-        
-
- 
+playerSelection();
     
